@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TBAL1 - Tugas Belum atau Lunas</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Header aplikasi -->
+        <header class="app-header">
+            <div class="logo">TB</div>
+
+            <div>
+                <h1>TBAL1</h1>
+                <p>Tugas Belum atau Lunas</p>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <h2>Halo, bro! 👋</h2>
+            <p>Atur tugas kuliahmu supaya nggak ada deadline yang terlewat.</p>
+        </section>
+
+        <!-- Form tambah tugas -->
+        <section class="form-card">
+            <h3>Tambah Tugas Baru</h3>
+
+            <form class="task-box" action="/tambah" method="POST">
+
+                <div class="form-group">
+                    <label for="nama_tugas">Nama tugas</label>
+
+                    <input
+                        type="text"
+                        id="nama_tugas"
+                        name="nama_tugas"
+                        placeholder="Contoh: Laporan Praktikum Filter RC"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">Tanggal deadline</label>
+
+                    <input
+                        type="date"
+                        id="deadline"
+                        name="deadline"
+                    >
+                </div>
+
+                <button type="submit" class="add-btn">
+                    + Tambah Tugas
+                </button>
+
+            </form>
+        </section>
+
+        <!-- Daftar tugas -->
+         <!-- Kalender deadline -->
+<section class="calendar-section">
+    <div class="section-heading">
+        <h3>📅 Kalender Deadline</h3>
+    </div>
+
+    <div class="calendar-card">
+        <div class="calendar-header">
+            <a
+                class="calendar-nav"
+                href="{{ url_for('home',
+                    bulan=bulan_sebelumnya,
+                    tahun=tahun_sebelumnya) }}"
+            >
+                ❮
+            </a>
+
+            <h3>{{ kalender_bulan }} {{ kalender_tahun }}</h3>
+
+            <a
+                class="calendar-nav"
+                href="{{ url_for('home',
+                    bulan=bulan_berikutnya,
+                    tahun=tahun_berikutnya) }}"
+            >
+                ❯
+            </a>
+        </div>
+
+        <div class="calendar-grid">
+            <div class="selected-tasks">
+    <h4>Tugas tanggal {{ selected_date }}</h4>
+
+    {% set tugas_dipilih =
+        tugas_per_tanggal.get(selected_date, []) %}
+
+    {% if tugas_dipilih %}
+        <ul>
+            {% for item in tugas_dipilih %}
+                <li>
+                    <span>{{ item.nama }}</span>
+
+                    {% if item.selesai %}
+                        <small class="deadline-label status-done">
+                            Selesai
+                        </small>
+                    {% elif item.deadline < today %}
+                        <small class="deadline-label status-overdue">
+                            Terlambat
+                        </small>
+                    {% elif item.deadline <= soon_until %}
+                        <small class="deadline-label status-soon">
+                            Segera
+                        </small>
+                    {% else %}
+                        <small class="deadline-label status-normal">
+                            Masih aman
+                        </small>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Belum ada tugas dengan deadline pada tanggal ini.</p>
+    {% endif %}
+</div>
+            {% for hari in ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"] %}
+                <div class="calendar-weekday">{{ hari }}</div>
+            {% endfor %}
+
+            {% for minggu in kalender_minggu %}
+                {% for tanggal in minggu %}
+                    {% if tanggal == 0 %}
+                        <div class="calendar-day empty"></div>
+                    {% else %}
+                        
+                        {% set tanggal_lengkap =
+                            "%04d-%02d-%02d"|format(
+                                kalender_tahun,
+                                request.args.get('bulan', today[5:7])|int,
+                                tanggal
+                            )
+                        %}
+                        {% set daftar_hari =
+                            tugas_per_tanggal.get(tanggal_lengkap, []) %}
+
+                        <div class="calendar-day
+                            <a href="{{ url_for(
+    'home',
+    tahun=kalender_tahun,
+    bulan=kalender_bulan_angka,
+    tanggal=tanggal_lengkap
+) }}"
+class="calendar-day
+{% if tanggal_lengkap == today %}today{% endif %}
+{% if tanggal_lengkap == selected_date %} selected-date{% endif %}
+{% if daftar_hari %}has-deadline{% endif %}">
+                            <span>{{ tanggal }}</span>
+
+                            {% if daftar_hari %}
+                                <div class="calendar-dots">
+                                    {% for item in daftar_hari %}
+                                        <span class="calendar-dot
+                                            {% if item.selesai %}
+                                                dot-done
+                                            {% elif item.deadline < today %}
+                                                dot-overdue
+                                            {% elif item.deadline <= soon_until %}
+                                                dot-soon
+                                            {% else %}
+                                                dot-normal
+                                            {% endif %}">
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="calendar-legend">
+            <span><i class="dot-overdue"></i> Terlambat</span>
+            <span><i class="dot-soon"></i> Segera</span>
+            <span><i class="dot-normal"></i> Masih aman</span>
+            <span><i class="dot-done"></i> Selesai</span>
+        </div>
+    </div>
+</section>
+        <section class="tasks-section">
+            <div class="section-heading">
+                <h3>Daftar Tugas</h3>
+                <span class="task-count">{{ tugas|length }} tugas</span>
+            </div>
+
+            {% if tugas %}
+                <ul class="task-list">
+
+                    {% for item in tugas %}
+                        <li class="task-card">
+
+                            <div class="task-info">
+                                <span class="task-name {% if item.selesai %}completed{% endif %}">
+                                    {{ item.nama }}
+                                </span>
+
+                                <!-- Indikator deadline -->
+                                {% if item.selesai %}
+
+                                    <small class="deadline-label status-done">
+                                        ✓ Tugas selesai
+
+                                        {% if item.deadline %}
+                                            · {{ item.deadline[8:10] }}-{{ item.deadline[5:7] }}-{{ item.deadline[0:4] }}
+                                        {% endif %}
+                                    </small>
+
+                                {% elif item.deadline %}
+
+                                    {% if item.deadline < today %}
+
+                                        <small class="deadline-label status-overdue">
+                                            ⚠ Deadline terlewat:
+                                            {{ item.deadline[8:10] }}-{{ item.deadline[5:7] }}-{{ item.deadline[0:4] }}
+                                        </small>
+
+                                    {% elif item.deadline <= soon_until %}
+
+                                        <small class="deadline-label status-soon">
+                                            ⏳ Deadline dekat:
+                                            {{ item.deadline[8:10] }}-{{ item.deadline[5:7] }}-{{ item.deadline[0:4] }}
+                                        </small>
+
+                                    {% else %}
+
+                                        <small class="deadline-label status-normal">
+                                            📅 Deadline:
+                                            {{ item.deadline[8:10] }}-{{ item.deadline[5:7] }}-{{ item.deadline[0:4] }}
+                                        </small>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <small class="deadline-label no-deadline">
+                                        Belum ada deadline
+                                    </small>
+
+                                {% endif %}
+                            </div>
+
+                            <!-- Tombol aksi -->
+                            <div class="task-actions">
+
+                                <form
+                                    action="{{ url_for('selesai', id_tugas=item.id) }}"
+                                    method="POST"
+                                >
+                                    <button type="submit" class="done-btn">
+                                        {% if item.selesai %}
+                                            Batalkan
+                                        {% else %}
+                                            Selesai
+                                        {% endif %}
+                                    </button>
+                                </form>
+
+                                <form
+                                    action="{{ url_for('hapus', id_tugas=item.id) }}"
+                                    method="POST"
+                                >
+                                    <button type="submit" class="delete-btn">
+                                        Hapus
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </li>
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <div class="empty-icon">📚</div>
+                    <h3>Belum ada tugas</h3>
+                    <p>Tambahkan tugas pertamamu di atas, bro!</p>
+                </div>
+
+            {% endif %}
+        </section>
+
+        <footer class="app-footer">
+            <p>TBAL1 · Belajar teratur, tugas lebih terkendali ✨</p>
+        </footer>
+
+    </div>
+</body>
+</html>

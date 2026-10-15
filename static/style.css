@@ -1,0 +1,476 @@
+/* =========================
+   STUDYMATE - CLEAN MINIMALIST
+   Tema: Putih + Biru
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+/* Kartu utama */
+.container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 36px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+/* Judul aplikasi */
+h1 {
+    margin: 0 0 8px;
+    color: #1d4ed8;
+    font-size: 34px;
+    font-weight: 750;
+    letter-spacing: -1px;
+}
+
+h3 {
+    margin: 30px 0 12px;
+    font-size: 20px;
+    color: #0f172a;
+}
+
+p {
+    margin-top: 0;
+    color: #64748b;
+}
+
+/* Form tambah tugas */
+.task-box {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.task-box input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 15px;
+    font: inherit;
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.task-box input::placeholder {
+    color: #94a3b8;
+}
+
+.task-box input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Tombol umum */
+button {
+    padding: 12px 16px;
+    font: inherit;
+    font-weight: 600;
+    color: #ffffff;
+    background: #2563eb;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+/* Daftar tugas */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.task-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.task-list li:hover {
+    background: #f1f5f9;
+    border-color: #bfdbfe;
+}
+
+.task-list li span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: #334155;
+}
+
+/* Status tugas selesai */
+.completed {
+    color: #94a3b8 !important;
+    text-decoration: line-through;
+}
+
+/* Tombol aksi */
+.task-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.task-actions form {
+    margin: 0;
+}
+
+.done-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    background: #2563eb;
+}
+
+.done-btn:hover {
+    background: #1d4ed8;
+}
+
+.delete-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.delete-btn:hover {
+    background: #fecaca;
+}
+
+/* Pesan ketika belum ada tugas */
+.note {
+    margin-top: 10px;
+    padding: 18px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    color: #64748b;
+}
+
+/* Tampilan layar HP */
+@media (max-width: 600px) {
+    body {
+        padding: 16px 12px;
+    }
+
+    .container {
+        margin: 10px auto;
+        padding: 22px 16px;
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .task-box {
+        flex-direction: column;
+    }
+
+    .task-box input,
+    .task-box button {
+        width: 100%;
+    }
+
+    .task-list li {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .task-actions {
+        width: 100%;
+    }
+}
+/* Indikator status deadline */
+.status-done {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.status-overdue {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.status-soon {
+    color: #c2410c;
+    background: #ffedd5;
+}
+
+.status-normal {
+    color: #1d4ed8;
+    background: #dbeafe;
+}
+
+.no-deadline {
+    color: #64748b;
+    background: #f1f5f9;
+}
+
+.deadline-label {
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+/* Kalender deadline TBAL1 */
+.calendar-section {
+    margin: 24px 0;
+}
+
+.calendar-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.calendar-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.calendar-nav:hover {
+    background: #dbeafe;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-weekday {
+    padding: 8px 0;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.calendar-day {
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    padding: 8px 2px;
+    border-radius: 9px;
+    background: #f9fafb;
+    font-size: 14px;
+}
+
+.calendar-day.empty {
+    background: transparent;
+}
+
+.calendar-day.today {
+    outline: 2px solid #2563eb;
+    background: #eff6ff;
+    font-weight: 700;
+}
+
+.calendar-day.has-deadline {
+    background: #f3f4f6;
+}
+
+.calendar-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.calendar-dot,
+.calendar-legend i {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.dot-overdue {
+    background: #dc2626;
+}
+
+.dot-soon {
+    background: #ea580c;
+}
+
+.dot-normal {
+    background: #2563eb;
+}
+
+.dot-done {
+    background: #16a34a;
+}
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    margin-top: 18px;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.calendar-legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+@media (max-width: 480px) {
+    .calendar-card {
+        padding: 12px;
+    }
+
+    .calendar-grid {
+        gap: 3px;
+    }
+
+    .calendar-day {
+        min-height: 42px;
+        font-size: 12px;
+    }
+
+    .calendar-legend {
+        gap: 8px;
+    }
+}
+/* Tanggal kalender yang bisa diklik */
+.calendar-day {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 6px;
+}
+
+.calendar-day:hover {
+    background: #e5edff;
+}
+
+.calendar-day.selected-date {
+    outline: 2px solid #2563eb;
+    background: #dbeafe;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.selected-tasks {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 16px;
+}
+
+.selected-tasks h4 {
+    margin: 0 0 12px;
+    font-size: 20px;
+}
+
+.selected-tasks ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.selected-tasks li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.selected-tasks small {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+}
+/* Membuat tulisan tanggal lebih jelas */
+.calendar-day {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Membuat tulisan tugas lebih jelas dan lega */
+.selected-tasks li {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    line-height: 1.7;
+}
+
+/* Judul bagian tugas */
+.selected-tasks h4 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
