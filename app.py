@@ -147,6 +147,7 @@ def home():
         today=hari_ini.isoformat(),
         soon_until=batas_dekat.isoformat(),
         kalender_bulan=calendar.month_name[bulan],
+        kalender_bulan_angka=bulan,
         kalender_tahun=tahun,
         kalender_minggu=minggu,
         tugas_per_tanggal=tugas_per_tanggal,

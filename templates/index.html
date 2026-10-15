@@ -94,42 +94,6 @@
         </div>
 
         <div class="calendar-grid">
-            <div class="selected-tasks">
-    <h4>Tugas tanggal {{ selected_date }}</h4>
-
-    {% set tugas_dipilih =
-        tugas_per_tanggal.get(selected_date, []) %}
-
-    {% if tugas_dipilih %}
-        <ul>
-            {% for item in tugas_dipilih %}
-                <li>
-                    <span>{{ item.nama }}</span>
-
-                    {% if item.selesai %}
-                        <small class="deadline-label status-done">
-                            Selesai
-                        </small>
-                    {% elif item.deadline < today %}
-                        <small class="deadline-label status-overdue">
-                            Terlambat
-                        </small>
-                    {% elif item.deadline <= soon_until %}
-                        <small class="deadline-label status-soon">
-                            Segera
-                        </small>
-                    {% else %}
-                        <small class="deadline-label status-normal">
-                            Masih aman
-                        </small>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Belum ada tugas dengan deadline pada tanggal ini.</p>
-    {% endif %}
-</div>
             {% for hari in ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"] %}
                 <div class="calendar-weekday">{{ hari }}</div>
             {% endfor %}
@@ -139,28 +103,25 @@
                     {% if tanggal == 0 %}
                         <div class="calendar-day empty"></div>
                     {% else %}
-                        
                         {% set tanggal_lengkap =
                             "%04d-%02d-%02d"|format(
                                 kalender_tahun,
-                                request.args.get('bulan', today[5:7])|int,
+                                kalender_bulan_angka,
                                 tanggal
                             )
                         %}
                         {% set daftar_hari =
                             tugas_per_tanggal.get(tanggal_lengkap, []) %}
 
-                        <div class="calendar-day
-                            <a href="{{ url_for(
-    'home',
-    tahun=kalender_tahun,
-    bulan=kalender_bulan_angka,
-    tanggal=tanggal_lengkap
-) }}"
-class="calendar-day
-{% if tanggal_lengkap == today %}today{% endif %}
-{% if tanggal_lengkap == selected_date %} selected-date{% endif %}
-{% if daftar_hari %}has-deadline{% endif %}">
+                        <a
+                            href="{{ url_for(
+                                'home',
+                                tahun=kalender_tahun,
+                                bulan=kalender_bulan_angka,
+                                tanggal=tanggal_lengkap
+                            ) }}"
+                            class="calendar-day{% if tanggal_lengkap == today %} today{% endif %}{% if tanggal_lengkap == selected_date %} selected-date{% endif %}{% if daftar_hari %} has-deadline{% endif %}"
+                        >
                             <span>{{ tanggal }}</span>
 
                             {% if daftar_hari %}
@@ -180,10 +141,46 @@ class="calendar-day
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                        </div>
+                        </a>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
+        </div>
+
+        <div class="selected-tasks">
+            <h4>Tugas tanggal {{ selected_date }}</h4>
+
+            {% set tugas_dipilih = tugas_per_tanggal.get(selected_date, []) %}
+
+            {% if tugas_dipilih %}
+                <ul>
+                    {% for item in tugas_dipilih %}
+                        <li>
+                            <span>{{ item.nama }}</span>
+
+                            {% if item.selesai %}
+                                <small class="deadline-label status-done">
+                                    Selesai
+                                </small>
+                            {% elif item.deadline < today %}
+                                <small class="deadline-label status-overdue">
+                                    Terlambat
+                                </small>
+                            {% elif item.deadline <= soon_until %}
+                                <small class="deadline-label status-soon">
+                                    Segera
+                                </small>
+                            {% else %}
+                                <small class="deadline-label status-normal">
+                                    Masih aman
+                                </small>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Belum ada tugas dengan deadline pada tanggal ini.</p>
+            {% endif %}
         </div>
 
         <div class="calendar-legend">
